@@ -1,6 +1,6 @@
 # Generic and Trend-aware Curriculum Learning for Relation Extraction
 
-GTNN is a generic and trend-aware curriculum learning approach that effectively integrates textual and structural information in text graphs for relation extraction between entities, which we consider as node pairs in graphs. The proposed model extends existing curriculum learning approaches by incorporating sample-level loss trends to better discriminate easier from harder samples and schedule them for training.
+Graph Text Neural Network (GTNN) is a generic and trend-aware curriculum learning approach that effectively integrates textual and structural information in text graphs for relation extraction between entities, which we consider as node pairs in graphs. The proposed model extends existing curriculum learning approaches by incorporating sample-level loss trends to better discriminate easier from harder samples and schedule them for training.
 
 GTNN has three main componenets 1) Graph Neural Encoder: module to learn from the graph structure, 2) Textual Information Encoder: module to add additional features, 3) Curriculum based Graph Neural Decoder: a curriculum to dynamically decide easy and hard examples while training the model.
 
