@@ -150,9 +150,8 @@ def calculate_superloss(b_loss, step, batch, training_type, device, alpha,super_
     elif training_type == "sl_trend":
         return calculate_trend_superloss(b_loss, step, batch, device, alpha, super_loss,nb_prev_loss)
 
-
-def train_model(train_loader, val_loader,  args):
-
+def init_model(args):
+    
     node_feature_dim = utils.get_features_dim(args)
     add_additional_feature = args.add_additional_feature
     device = variables.device
@@ -160,11 +159,20 @@ def train_model(train_loader, val_loader,  args):
     additional_feature_dim = utils.get_additional_features_dim(args)
     fusion_type = args.fusion_type
     model_type = args.model_type
+    model = models.GTNN(node_feature_dim, add_additional_feature, device, gs_dim, additional_feature_dim,
+                        fusion_type, model_type)
+    
+    return model
+
+def train_model(train_loader, val_loader,  args):
+
+    model = init_model(args).to(device)
+    model = model.to(device) 
+    
     lr = float(args.lr)
     L2 = float(args.l2)
 
     alpha = float(args.alpha)
-
     training_type = args.training_type
     sl_lambda = float(args.sl_lambda)
     mode = args.mode
@@ -176,9 +184,6 @@ def train_model(train_loader, val_loader,  args):
     cls_weight = compute_class_weight("balanced", [0, 1], [0] * neg_x + [1])
     cls_weight = cls_weight.tolist()
 
-    model = models.GTNN(node_feature_dim, add_additional_feature, device, gs_dim, additional_feature_dim,
-                        fusion_type, model_type).to(device)
-    model = model.to(device)
 
     optimizer = torch.optim.Adam(params=model.parameters(), lr=lr, weight_decay=L2)
     bce_loss = nn.BCELoss(reduction='none')
